@@ -1,14 +1,16 @@
 import { Category } from "../../model/Category";
 import { ICategoryRepository, ICreateCategoryDTO } from "../ICategoryRepository";
+import { PrismaClient} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-
+export const prisma = new PrismaClient()
 
 class CategoriesRepository implements ICategoryRepository{
-    private categories: Category[];
+    private repository: Category[];
     private static INSTANCE: CategoriesRepository;
     
     private constructor() {
-        this.categories = [];
+        this.repository = [];
     }
 
     public static getInstance(): CategoriesRepository {
@@ -18,18 +20,12 @@ class CategoriesRepository implements ICategoryRepository{
         return CategoriesRepository.INSTANCE;
     }
 
-    create({name,description }: ICreateCategoryDTO): void { 
-        const category = new Category();
-     
-        Object.assign(category, {
+    async create({ name, description }: ICreateCategoryDTO) {
+        await prisma.categories.create({
         name,
-        description,
-        created_at: new Date(),
-        });
-
-        this.categories.push(category);
-    }  
-    
+        description
+    }
+        
     list(): Category[] {
         return this.categories;
     }
