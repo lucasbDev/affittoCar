@@ -7,33 +7,34 @@ export const prisma = new PrismaClient()
 
 class CategoriesRepository implements ICategoryRepository{
     private repository: Category[];
-    private static INSTANCE: CategoriesRepository;
+    // private static INSTANCE: CategoriesRepository;
     
-    private constructor() {
+    constructor() {
         this.repository = [];
     }
 
-    public static getInstance(): CategoriesRepository {
-        if (!CategoriesRepository.INSTANCE) {
-            CategoriesRepository.INSTANCE = new CategoriesRepository();
-        }
-        return CategoriesRepository.INSTANCE;
-    }
+    // public static getInstance(): CategoriesRepository {
+    //     if (!CategoriesRepository.INSTANCE) {
+    //         CategoriesRepository.INSTANCE = new CategoriesRepository();
+    //     }
+    //     return CategoriesRepository.INSTANCE;
+    // }
 
-    async create({ name, description }: ICreateCategoryDTO) {
-        await prisma.categories.create({
-        name,
-        description
+    async create({ data }: ICreateCategoryDTO): Promise<void> {
+        const category = await prisma.categories.create({
+            data
+        })
     }
         
-    list(): Category[] {
-        return this.categories;
+    // async list() { //: Promise<Category[]>
+        //   const categories = await prisma.categories.findMany()
+        //   return categories
     }
 
-    findByName(name: string): Category | undefined{
-        const category = this.categories.find((category) => category.name === name);
-        return category;
-    }
-}
+//     findByName(name: string): Category | undefined{
+//         const category = this.categories.find(();
+//         return category;
+//     }
+// }
 
 export { CategoriesRepository }
