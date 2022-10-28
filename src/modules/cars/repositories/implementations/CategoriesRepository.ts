@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client";
 
 export const prisma = new PrismaClient()
 
-class CategoriesRepository implements ICategoryRepository{
+class CategoriesRepository implements ICategoryRepository {
     private repository: Category[];
     // private static INSTANCE: CategoriesRepository;
     
@@ -20,21 +20,32 @@ class CategoriesRepository implements ICategoryRepository{
     //     return CategoriesRepository.INSTANCE;
     // }
 
-    async create({ data }: ICreateCategoryDTO): Promise<void> {
+    async create({ data }: ICreateCategoryDTO): Promise<Category> {
         const category = await prisma.categories.create({
             data
         })
+        return category
     }
         
-    // async list() { //: Promise<Category[]>
-        //   const categories = await prisma.categories.findMany()
-        //   return categories
+    async list({data}:ICreateCategoryDTO): Promise<Category[]>{
+        const categories = await prisma.categories.findMany({
+            where:{
+                id:data.id
+            }
+        })
+          return categories
+    
     }
+          
+     async findByName ({ data }: ICreateCategoryDTO): Promise<Category > {
+         const category = await prisma.categories.findFirst({
+            where:{
+                name: data.name 
+            }
+         })
+         return category;
+    }
+}
 
-//     findByName(name: string): Category | undefined{
-//         const category = this.categories.find(();
-//         return category;
-//     }
-// }
 
 export { CategoriesRepository }
